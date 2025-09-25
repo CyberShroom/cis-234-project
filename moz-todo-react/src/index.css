@@ -1,0 +1,122 @@
+:root {
+    --template-column: 20vw 60vw 20vw;
+    --template-row: 20vh 10vh auto auto;
+}
+
+body {
+    margin: 0px;
+    background-color: rgb(14, 51, 40);
+    background-repeat: repeat-x;
+    background-size: contain;
+}
+
+h1 {
+  grid-column: 2 / 3;
+  width: 100%;
+  font-size: 5vw;
+  align-self: center;
+  text-align: center;
+  margin-left: 5px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button {
+    font-size: 2vw;
+    font-weight: bold;
+    background-color: #ffffff;
+    border: 5px solid black;
+    border-radius: 10px;
+    height: 100%;
+    width: 75%;
+    margin-left: 10%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+button:hover {
+    background-color: grey;
+}
+
+a {
+    height: 100%;
+    width: 100%;
+    align-content: center;
+}
+
+#grid-div {
+    display: grid;
+    grid-template-columns: var(--template-column);
+    grid-template-rows: var(--template-row);
+}
+
+#top {
+    grid-column: 1 / 4;
+    grid-row: 1;
+    background-color: #808080;
+    display: grid;
+    grid-template-columns: var(--template-column);
+}
+
+#header {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+#left {
+    grid-column: 1 / 2;
+    grid-row: 2 / 5;
+}
+
+#nav {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+    background-color: #8d8989;
+    border: 10px solid #000000;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    overflow: hidden;
+    margin-top: 5px;
+    position: sticky;
+    top: 0px;
+    align-content: center;
+}
+
+#content {
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
+    background-color: #FFD600;
+    border: 5px solid #807540;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#footer {
+    grid-column: 1 / 4;
+    grid-row: 4 / 5;
+    background-color: #39AAAA;
+    border: 10px outset #807540;
+}
+
+#right {
+    grid-column: 3 / 4;
+    grid-row: 2 / 5;
+}
+
+#make-new-note {
+    display: flex;
+    height: 200px;
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    background-color: #ffffff;
+    border: 5px solid #000000;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    justify-content: center;
+}
+
+.note-input {
+    width: 100%;
+    border: 0px;
+}
+
