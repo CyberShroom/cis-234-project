@@ -3,7 +3,8 @@ import { useState } from 'react'
 function Note()
 {
     return (
-    <li></li>
+    //<li></li>
+    <></>
   );
 }
 

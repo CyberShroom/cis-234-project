@@ -6,7 +6,7 @@ function Create(props)
     {
         return (
             <div id='make-new-note'>
-                <textarea className="note-input" placeholder='Type here...'/>
+                <textarea id="note-input" placeholder='Type here...'/>
             </div>
         );
     }

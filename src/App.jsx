@@ -6,25 +6,34 @@ import List from './divs/List';
 import Create from './divs/Create';
 
 function App() {
-  const [count, setCount] = useState(0)
+  //The array that contains all the notes.
+  const [noteList, setNoteList] = useState([]);
 
+  //Booleans that determine whether a note or task is being created.
   const [isWritingNote, setIsWritingNote] = useState(false);
   const [isWritingTask, setIsWritingTask] = useState(false);
+
+  //Used when making new notes to determine the entry number.
+  const [latestEntryNumber, setEntryNumber] = useState(0);
   
+  //Setter for isWritingNote
   const setNoteState = (noteState) => {
     console.log("Setting note state to:", noteState);
     setIsWritingNote(noteState);
   }
 
+  //Setter for is WritingTask
   const setTaskState = (taskState) => {
     console.log("Setting task state to:", taskState);
     setIsWritingTask(taskState);
   }
 
+  //Adds a note to the array of notes.
+  const addNoteToList = (newEntry, type) => {
+    console.log("Adding new note to the list.");
 
-  function createNote()
-  {
-    const noteList = document.getElementById('note-list');
+    setNoteList([...noteList, {text:newEntry, entryNumber:latestEntryNumber + 1, type:type}]);
+    setEntryNumber(latestEntryNumber + 1);
   }
 
   return (
@@ -40,8 +49,8 @@ function App() {
         <div id="right">
 
         </div>
-        <Nav noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask}/>
-        <List />
+        <Nav noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
+        <List noteList={noteList}/>
         <Create noteState={isWritingNote} taskState={isWritingTask}/>
         <div id="footer">
 

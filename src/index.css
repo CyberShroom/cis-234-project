@@ -5,7 +5,7 @@
 
 body {
     margin: 0px;
-    background-color: rgb(14, 51, 40);
+    background-color: #808080;
     background-repeat: repeat-x;
     background-size: contain;
 }
@@ -71,7 +71,6 @@ a {
     grid-row: 2 / 3;
     background-color: #8d8989;
     border: 10px solid #000000;
-    border-radius: 10px;
     display: grid;
     grid-template-columns: repeat(2,1fr);
     overflow: hidden;
@@ -86,7 +85,6 @@ a {
     grid-row: 3 / 4;
     background-color: #FFD600;
     border: 5px solid #807540;
-    border-radius: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -110,12 +108,12 @@ a {
     grid-row: 3 / 4;
     background-color: #ffffff;
     border: 5px solid #000000;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     justify-content: center;
 }
 
-.note-input {
+#note-input {
     width: 100%;
     border: 0px;
 }
