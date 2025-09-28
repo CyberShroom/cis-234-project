@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 function Create(props)
 {
+    //If either state is true, draw the note creation div.
     if(props.noteState === true || props.taskState === true)
     {
         return (
@@ -10,7 +11,7 @@ function Create(props)
             </div>
         );
     }
-    else
+    else //Otherwise, dont draw the div.
     {
         return null;
     }

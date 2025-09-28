@@ -1,13 +1,46 @@
 import { useState } from 'react'
-import Note from './Note';
 
 function List(props)
 {
+    //This function runs logic to determine which kind of list item to create.
+    const handleCreation = (item) => {
+      //If the type is note, create a note, otherwise, create a task.
+      if(item.type === "note")
+      {
+        return createNote(item);
+      }
+      else
+      {
+        return createTask(item);
+      }
+    }
+
+    //Returns the li needed for a note entry.
+    function createNote(item)
+    {
+      return(
+        <li key={item.id}>
+          {item.text}
+        </li>
+      );
+    }
+
+    //Returns the li needed for a task entry.
+    function createTask(item)
+    {
+      return(
+        <li key={item.id}>
+          <input type="checkbox"/>
+          {item.text}
+        </li>
+      );
+    }
+
     return (
     <div id="content">
         <ul id="note-list">
           {props.noteList.map((item) => (
-            <Note />
+            handleCreation(item)
           ))}
         </ul>
     </div>

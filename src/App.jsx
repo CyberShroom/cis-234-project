@@ -18,13 +18,11 @@ function App() {
   
   //Setter for isWritingNote
   const setNoteState = (noteState) => {
-    console.log("Setting note state to:", noteState);
     setIsWritingNote(noteState);
   }
 
   //Setter for is WritingTask
   const setTaskState = (taskState) => {
-    console.log("Setting task state to:", taskState);
     setIsWritingTask(taskState);
   }
 
@@ -32,7 +30,7 @@ function App() {
   const addNoteToList = (newEntry, type) => {
     console.log("Adding new note to the list.");
 
-    setNoteList([...noteList, {text:newEntry, entryNumber:latestEntryNumber + 1, type:type}]);
+    setNoteList([...noteList, {text:newEntry, entryNumber:latestEntryNumber + 1, type:type, id:crypto.randomUUID()}]);
     setEntryNumber(latestEntryNumber + 1);
   }
 
