@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button } from 'react-bootstrap';
+import { Button, Stack } from 'react-bootstrap';
 
 function ButtonBar(props)
 {
@@ -10,6 +10,10 @@ function ButtonBar(props)
     //The text of the buttons.
     const [noteText, setNoteText] = useState(defaultNoteText);
     const [taskText, setTaskText] = useState(defaultTaskText);
+
+    //The variant of the buttons
+    const [noteVariant, setNoteVariant] = useState('primary');
+    const [taskVariant, setTaskVariant] = useState('primary');
 
     //Function ran by the note button.
     const handleNoteClick = () => {
@@ -24,13 +28,17 @@ function ButtonBar(props)
             
             setNoteText(defaultNoteText);
             setTaskText(defaultTaskText);
+            setNoteVariant("primary");
+            setTaskVariant("primary");
             props.noteState(false);
             props.taskState(false);
         }
         else
         {
             setNoteText("Finish");
+            setNoteVariant("success");
             setTaskText("Cancel");
+            setTaskVariant("danger");
             props.noteState(true);
         }
     }
@@ -48,22 +56,28 @@ function ButtonBar(props)
 
             setNoteText(defaultNoteText);
             setTaskText(defaultTaskText);
+            setNoteVariant("primary");
+            setTaskVariant("primary");
             props.noteState(false);
             props.taskState(false);
         }
         else
         {
             setNoteText("Cancel");
+            setNoteVariant("danger");
             setTaskText("Finish");
+            setTaskVariant("success");
             props.taskState(true);
         }
     }
 
     return (
-    <div id="button-bar">
-        <Button variant='primary' onClick={handleNoteClick}>{noteText}</Button>
-        <Button variant='primary' onClick={handleTaskClick}>{taskText}</Button>
-    </div>
+        <Stack className="border p-3 bg-dark" id="button-bar" direction='horizontal' gap={5}>
+            <div></div>
+                <Button variant={noteVariant} onClick={handleNoteClick}>{noteText}</Button>
+                <Button variant={taskVariant} onClick={handleTaskClick}>{taskText}</Button>
+            <div></div>
+        </Stack>
   );
 }
 

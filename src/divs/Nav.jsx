@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Stack } from 'react-bootstrap';
 
 function Nav()
 {
@@ -7,12 +7,14 @@ function Nav()
     const navigate = useNavigate();
 
     return (
-    <div id="nav">
-        <Button variant='primary' onClick={() => navigate('/')}>Home</Button>
-        <Button variant='primary' onClick={() => navigate('/about')}>About</Button>
-        <Button variant='primary' onClick={() => navigate('/contact')}>Contact</Button>
-    </div>
-  );
+        <Stack className="border p-3 bg-dark" id="nav" direction='horizontal' gap={5}>
+            <div></div>
+            <Button variant='primary' onClick={() => navigate('/')}>Home</Button>
+            <Button variant='primary' onClick={() => navigate('/about')}>About</Button>
+            <Button variant='primary' onClick={() => navigate('/contact')}>Contact</Button>
+            <div></div>
+        </Stack>
+    );
 }
 
 export default Nav;
