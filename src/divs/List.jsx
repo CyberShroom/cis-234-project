@@ -37,7 +37,7 @@ function List(props)
     }
 
     return (
-    <div id="content">
+    <div id="content-home">
         <ul id="note-list">
           {props.noteList.map((item) => (
             handleCreation(item)

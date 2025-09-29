@@ -3,6 +3,7 @@ import Top from '../divs/Top';
 import Nav from '../divs/Nav';
 import List from '../divs/List';
 import Create from '../divs/Create';
+import ButtonBar from '../divs/ButtonBar';
 
 function HomePage() {
     //The array that contains all the notes.
@@ -46,7 +47,8 @@ function HomePage() {
                 <div id="right">
 
                 </div>
-                <Nav noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
+                <Nav />
+                <ButtonBar noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
                 <List noteList={noteList}/>
                 <Create noteState={isWritingNote} taskState={isWritingTask}/>
                 <div id="footer">
