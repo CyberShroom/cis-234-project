@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from 'react-bootstrap';
 
 function ButtonBar(props)
 {
@@ -60,8 +61,8 @@ function ButtonBar(props)
 
     return (
     <div id="button-bar">
-        <button id="create-note" type="button" onClick={handleNoteClick}>{noteText}</button>
-        <button id="create-task" type="button" onClick={handleTaskClick}>{taskText}</button>
+        <Button variant='primary' onClick={handleNoteClick}>{noteText}</Button>
+        <Button variant='primary' onClick={handleTaskClick}>{taskText}</Button>
     </div>
   );
 }

@@ -5,7 +5,7 @@
 
 body {
     margin: 0px;
-    background-color: #808080;
+    background-color: #6b4d2a;
     background-repeat: repeat-x;
     background-size: contain;
 }
@@ -35,7 +35,6 @@ button {
     font-weight: bold;
     background-color: #ffffff;
     border: 5px solid black;
-    border-radius: 10px;
     height: 100%;
     width: 75%;
     margin-left: 10%;
@@ -85,7 +84,6 @@ a {
     grid-template-columns: repeat(3,1fr);
     overflow: hidden;
     margin-top: 5px;
-    position: sticky;
     top: 0px;
     align-content: center;
 }
@@ -108,7 +106,7 @@ a {
     grid-column: 1 / 4;
     grid-row: 4 / 5;
     background-color: #FFD600;
-    border: 5px solid #807540;
+    border: 5px solid #000000;
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -117,7 +115,7 @@ a {
     grid-column: 2 / 3;
     grid-row: 3 / 5;
     background-color: #FFD600;
-    border: 5px solid #807540;
+    border: 5px solid #000000;
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -136,6 +134,8 @@ a {
 
 #make-new-note {
     display: flex;
+    position: sticky;
+    top: 95px;
     height: 200px;
     grid-column: 2 / 3;
     grid-row: 4 / 5;
