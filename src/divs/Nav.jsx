@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function Nav()
 {
@@ -7,9 +8,9 @@ function Nav()
 
     return (
     <div id="nav">
-        <button id="nav-home" type="button" onClick={() => navigate('/')}>Home</button>
-        <button id="nav-about" type="button" onClick={() => navigate('/about')}>About</button>
-        <button id="nav-contact" type="button" onClick={() => navigate('/contact')}>Contact</button>
+        <Button variant='primary' onClick={() => navigate('/')}>Home</Button>
+        <Button variant='primary' onClick={() => navigate('/about')}>About</Button>
+        <Button variant='primary' onClick={() => navigate('/contact')}>Contact</Button>
     </div>
   );
 }
