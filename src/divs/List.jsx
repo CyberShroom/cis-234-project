@@ -20,7 +20,7 @@ function List(props)
     {
       return(
         <li key={item.id}>
-          {item.text}
+          {item.content}
         </li>
       );
     }
@@ -31,7 +31,7 @@ function List(props)
       return(
         <li key={item.id}>
           <input type="checkbox"/>
-          {item.text}
+          {item.content}
         </li>
       );
     }

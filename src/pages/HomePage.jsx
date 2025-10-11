@@ -12,13 +12,24 @@ function HomePage() {
 
       //Fetch values from supabase
       useEffect(() => {
-        getNoteList();
+        fetchNoteList();
       });
-      async function getNoteList() 
+      async function fetchNoteList() 
       {
         const { data } = await supabase.from("Tasks").select();
         setNoteList(data);
       }
+      //Add a row to supabase
+      async function addRow(newEntry)
+      {
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry}]);
+        if(error) console.error("Insert error:", error);
+        //Refresh the list. In the future this will not be necessary.
+        else {
+          fetchNoteList();
+        }
+      }
+      
     
       //Booleans that determine whether a note or task is being created.
       const [isWritingNote, setIsWritingNote] = useState(false);
@@ -41,8 +52,12 @@ function HomePage() {
       const addNoteToList = (newEntry, type) => {
         console.log("Adding new note to the list.");
     
+        //Add a client side note. In the future, an icon should display to show if it has loaded in supabase. That way the list does not need to be refreshed.
         setNoteList([...noteList, {text:newEntry, entryNumber:latestEntryNumber + 1, type:type, id:crypto.randomUUID()}]);
         setEntryNumber(latestEntryNumber + 1);
+
+        //Add the note to supabase
+        addRow(newEntry);
       }
     
     return(
