@@ -22,9 +22,7 @@ function ButtonBar(props)
         {
             if(props.currentTaskState === false)
             {
-                let text = document.getElementById('note-input');
-
-                props.noteList(text.value, "note");
+                props.noteList("note");
             }
             
             setNoteText(defaultNoteText);
@@ -50,9 +48,7 @@ function ButtonBar(props)
         {
             if(props.currentNoteState === false)
             {
-                let text = document.getElementById('note-input');
-
-                props.noteList(text.value, "task");
+                props.noteList("task");
             }
 
             setNoteText(defaultNoteText);
