@@ -1,12 +1,11 @@
+'use client'
 import { useEffect, useState } from 'react';
 import supabase from '../lib/supabase';
-import Top from '../divs/Top';
-import Nav from '../divs/Nav';
-import List from '../divs/List';
-import Create from '../divs/Create';
-import ButtonBar from '../divs/ButtonBar';
+import List from './components/List';
+import Create from './components/Create';
+import ButtonBar from './components/ButtonBar';
 
-function HomePage() {
+export default function HomePage() {
       //The array that contains all the notes.
       const [noteList, setNoteList] = useState([]);
 
@@ -61,28 +60,22 @@ function HomePage() {
       }
     
     return(
-        <>
-            <div id="grid-div">
-                <Top />
-                <div id="header">
+      <main id="home">
+        <div id="header">
 
-                </div>
-                <div id="left">
+        </div>
+        <div id="left">
 
-                </div>
-                <div id="right">
+        </div>
+        <div id="right">
 
-                </div>
-                <Nav />
-                <ButtonBar noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
-                <List noteList={noteList}/>
-                <Create noteState={isWritingNote} taskState={isWritingTask}/>
-                <div id="footer">
+        </div>
+        <ButtonBar noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
+        <List noteList={noteList}/>
+        <Create noteState={isWritingNote} taskState={isWritingTask}/>
+        <div id="footer">
 
-                </div>
-            </div>
-    </>
+        </div>
+      </main>
     );
 }
-
-export default HomePage;
