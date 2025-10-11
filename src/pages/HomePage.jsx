@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import supabase from '../lib/supabase';
 import Top from '../divs/Top';
 import Nav from '../divs/Nav';
 import List from '../divs/List';
@@ -6,8 +7,18 @@ import Create from '../divs/Create';
 import ButtonBar from '../divs/ButtonBar';
 
 function HomePage() {
-    //The array that contains all the notes.
+      //The array that contains all the notes.
       const [noteList, setNoteList] = useState([]);
+
+      //Fetch values from supabase
+      useEffect(() => {
+        getNoteList();
+      });
+      async function getNoteList() 
+      {
+        const { data } = await supabase.from("Tasks").select();
+        setNoteList(data);
+      }
     
       //Booleans that determine whether a note or task is being created.
       const [isWritingNote, setIsWritingNote] = useState(false);

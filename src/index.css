@@ -3,13 +3,6 @@
     --template-row: 20vh 10vh 10vh auto auto;
 }
 
-body {
-    margin: 0px;
-    background-color: #6b4d2a;
-    background-repeat: repeat-x;
-    background-size: contain;
-}
-
 h1 {
   grid-column: 2 / 3;
   align-self: center;
@@ -63,7 +56,6 @@ button {
     margin-top: 5px;
     position: sticky;
     top: 0px;
-    align-content: center;
 }
 
 #content-home {
