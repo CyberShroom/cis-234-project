@@ -1,6 +1,8 @@
-import type { Metadata } from 'next'
-import './index.css';
+import type { Metadata } from 'next';
+import './layout.css';
+import './global.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Row, Col } from 'react-bootstrap';
 import Nav from './components/Nav';
 import Top from './components/Top';
  
@@ -18,11 +20,15 @@ export default function RootLayout({
     <html lang="en">
         <body>
             <div id="root">
-                <div id="grid-div">
+                <Container fluid className='mt-0'>
+                  <Row id='row1'>
                     <Top />
+                  </Row>
+                  <Row id='row2'>
                     <Nav />
-                    {children}
-                </div>
+                  </Row>
+                  {children}
+                </Container>
             </div>
         </body>
     </html>

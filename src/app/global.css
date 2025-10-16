@@ -1,0 +1,20 @@
+.stack-button {
+    height: 100%;
+    width: 100%;
+}
+
+.page-title {
+    align-self: center;
+    text-align: center;
+}
+
+.content {
+    background-color: #FFD600;
+    border: 5px solid #000000;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.content-p {
+    margin-left: 5px;
+}

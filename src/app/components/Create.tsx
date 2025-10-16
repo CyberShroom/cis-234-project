@@ -1,5 +1,7 @@
 'use client'
 import { useState } from 'react'
+import { Container, Row } from 'react-bootstrap'
+import '../styles/create.css'
 
 function Create(props)
 {
@@ -7,9 +9,11 @@ function Create(props)
     if(props.noteState === true || props.taskState === true)
     {
         return (
-            <div id='make-new-note'>
-                <textarea id="note-input" placeholder='Type here...' value={props.textReference} onChange={props.inputTextHandler}/>
-            </div>
+            <Row id='row4'>
+                <div id='create'>
+                    <textarea id="input" placeholder='Type here...' value={props.textReference} onChange={props.inputTextHandler}/>
+                </div>
+            </Row>
         );
     }
     else //Otherwise, dont draw the div.

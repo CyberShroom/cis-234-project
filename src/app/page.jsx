@@ -69,21 +69,22 @@ export default function HomePage() {
     
     return(
       <main id="home">
-        <div id="header">
-
-        </div>
-        <div id="left">
-
-        </div>
-        <div id="right">
-
-        </div>
-          <ButtonBar noteState={setNoteState} currentNoteState={isWritingNote} taskState={setTaskState} currentTaskState={isWritingTask} noteList={addNoteToList}/>
-          <List noteList={noteList}/>
-          <Create noteState={isWritingNote} taskState={isWritingTask} textReference={inputText} inputTextHandler={setInputTextAreaFromEvent}/>
-        <div id="footer">
-
-        </div>
+          <ButtonBar 
+            noteState={setNoteState} 
+            currentNoteState={isWritingNote} 
+            taskState={setTaskState} 
+            currentTaskState={isWritingTask} 
+            noteList={addNoteToList}
+          />
+          <Create 
+            noteState={isWritingNote} 
+            taskState={isWritingTask} 
+            textReference={inputText} 
+            inputTextHandler={setInputTextAreaFromEvent}
+          />
+          <List 
+            noteList={noteList}
+          />
       </main>
     );
 }

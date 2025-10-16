@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { Button, Stack } from 'react-bootstrap';
+import { Button, Row, Stack } from 'react-bootstrap';
+import '../styles/buttonbar.css'
 
 function ButtonBar(props)
 {
@@ -69,12 +70,14 @@ function ButtonBar(props)
     }
 
     return (
-        <Stack className="border p-3 bg-dark" id="button-bar" direction='horizontal' gap={5}>
-            <div></div>
-                <Button variant={noteVariant} onClick={handleNoteClick}>{noteText}</Button>
-                <Button variant={taskVariant} onClick={handleTaskClick}>{taskText}</Button>
-            <div></div>
-        </Stack>
+        <Row id='row3'>
+            <Stack className="border p-3 bg-dark justify-content-center" id="button-bar" direction='horizontal' gap={5}>
+                <div></div>
+                <Button variant={noteVariant} className='stack-button' onClick={handleNoteClick}>{noteText}</Button>
+                <Button variant={taskVariant} className='stack-button' onClick={handleTaskClick}>{taskText}</Button>
+                <div></div>
+            </Stack>
+        </Row>
   );
 }
 

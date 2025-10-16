@@ -1,0 +1,10 @@
+#top {
+    background-color: #808080;
+    align-content: center;
+}
+
+#top-text {
+   text-align: center;
+   font-size: 5vw;
+   font-weight: bold;
+}

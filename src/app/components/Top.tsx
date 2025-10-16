@@ -1,11 +1,11 @@
 'use client'
-import { useState } from 'react'
+import '../styles/top.css';
 
 function Top()
 {
     return (
-    <div id="top">
-        <h1>Task App</h1>
+    <div id='top'>
+        <p id='top-text'>Task App</p>
     </div>
   );
 }

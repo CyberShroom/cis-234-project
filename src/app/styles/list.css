@@ -1,0 +1,12 @@
+#row5 {
+    height: auto;
+    width: 100%;
+    margin-left: 0.1vw;
+}
+
+#content-home {
+    background-color: #FFD600;
+    border: 5px solid #000000;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

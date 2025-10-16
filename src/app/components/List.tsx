@@ -1,5 +1,7 @@
 'use client'
 import { useState } from 'react'
+import '../styles/list.css'
+import { Container, Row } from 'react-bootstrap';
 
 function List(props)
 {
@@ -38,14 +40,16 @@ function List(props)
     }
 
     return (
-    <div id="content-home">
-        <ul id="note-list">
-          {props.noteList.map((item) => (
-            handleCreation(item)
-          ))}
-        </ul>
-    </div>
-  );
+      <Row id='row5'>
+        <div id="content-home">
+          <ul>
+            {props.noteList.map((item) => (
+              handleCreation(item)
+            ))}
+          </ul>
+        </div>
+      </Row>
+    );
 }
 
 export default List;

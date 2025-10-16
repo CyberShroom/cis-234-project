@@ -1,15 +1,16 @@
 'use client'
 import { Button, Stack } from 'react-bootstrap';
 import Link from 'next/link';
+import '../styles/nav.css'
 
 function Nav()
 {
     return (
-        <Stack className="border p-3 bg-dark" id="nav" direction='horizontal' gap={5}>
+        <Stack className="border p-3 bg-dark justify-content-center" id="nav" direction='horizontal' gap={5}>
             <div></div>
-            <Link href="/"><Button variant='primary'>Home</Button></Link>
-            <Link href="/about"><Button variant='primary'>About</Button></Link>
-            <Link href="/contact"><Button variant='primary'>Contact</Button></Link>
+            <Link href="/" className='nav-link'><Button variant='primary' className='stack-button'>Home</Button></Link>
+            <Link href="/about" className='nav-link'><Button variant='primary' className='stack-button'>About</Button></Link>
+            <Link href="/contact" className='nav-link'><Button variant='primary' className='stack-button'>Contact</Button></Link>
             <div></div>
         </Stack>
     );
