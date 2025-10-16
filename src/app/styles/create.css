@@ -2,11 +2,10 @@
     height: auto;
     width: 100%;
     margin-left: 0.1vw;
+    top: 10vh;
 }
 
 #create {
-    position: sticky;
-    top: 95px;
     height: 50vh;
     background-color: #ffffff;
     border: 5px solid #000000;

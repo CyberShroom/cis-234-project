@@ -9,7 +9,7 @@ function Create(props)
     if(props.noteState === true || props.taskState === true)
     {
         return (
-            <Row id='row4'>
+            <Row id='row4' className='sticky-top'>
                 <div id='create'>
                     <textarea id="input" placeholder='Type here...' value={props.textReference} onChange={props.inputTextHandler}/>
                 </div>

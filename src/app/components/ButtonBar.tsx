@@ -70,7 +70,7 @@ function ButtonBar(props)
     }
 
     return (
-        <Row id='row3'>
+        <Row id='row3' className='sticky-top'>
             <Stack className="border p-3 bg-dark justify-content-center" id="button-bar" direction='horizontal' gap={5}>
                 <div></div>
                 <Button variant={noteVariant} className='stack-button' onClick={handleNoteClick}>{noteText}</Button>
