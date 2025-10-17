@@ -11,7 +11,8 @@ function Create(props)
         return (
             <Row id='row4' className='sticky-top'>
                 <div id='create'>
-                    <textarea id="input" placeholder='Type here...' value={props.textReference} onChange={props.inputTextHandler}/>
+                    <input id="input-title" placeholder='Type your title here...' value={props.titleReference} onChange={props.inputTitleHandler}/>
+                    <textarea id="input" placeholder='Type your content here...' value={props.textReference} onChange={props.inputTextHandler}/>
                 </div>
             </Row>
         );

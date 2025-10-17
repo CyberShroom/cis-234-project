@@ -29,9 +29,9 @@ export default function HomePage() {
         }
       }
       //Add a row to supabase
-      async function addRow(newEntry, type)
+      async function addRow(newEntry, newType, newTitle)
       {
-        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:type}]);
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle}]);
         if(error) console.error("Insert error:", error);
         //Refresh the list. In the future this will not be necessary.
         else {
@@ -48,6 +48,8 @@ export default function HomePage() {
 
       //A state to hold the text of the input text area
       const [inputText, setInputText] = useState('');
+      //A state to hold the text of the input title area
+      const [inputTitle, setInputTitle] = useState('');
 
       //Used by the List component. Contains the html that needs to be displayed to the user.
       const [display, setDisplay] = useState([]);
@@ -66,18 +68,24 @@ export default function HomePage() {
       const setInputTextAreaFromEvent = (event) => {
         setInputText(event.target.value);
       };
+
+      //Setter for input title
+      const setInputTitleFromEvent = (event) => {
+        setInputTitle(event.target.value);
+      };
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
         console.log("Adding new note to the list.");
     
         //Add a client side note. In the future, an icon should display to show if it has loaded in supabase. That way the list does not need to be refreshed.
-        setNoteList([...noteList, {text:inputText, entryNumber:latestEntryNumber + 1, type:type, id:crypto.randomUUID()}]);
+        setNoteList([...noteList, {text:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID()}]);
         setEntryNumber(latestEntryNumber + 1);
 
         //Add the note to supabase
-        addRow(inputText, type);
+        addRow(inputText, type, inputTitle);
         setInputText('');
+        setInputTitle('');
       }
 
   //updates the display state for the list component.
@@ -150,7 +158,9 @@ export default function HomePage() {
             noteState={isWritingNote} 
             taskState={isWritingTask} 
             textReference={inputText} 
+            titleReference={inputTitle}
             inputTextHandler={setInputTextAreaFromEvent}
+            inputTitleHandler={setInputTitleFromEvent}
           />
           <List 
             display={display}
