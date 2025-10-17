@@ -2,12 +2,16 @@
 import { useEffect, useState } from 'react';
 import supabase from '../lib/supabase';
 import List from './components/List';
+import Note from './components/Note';
 import Create from './components/Create';
 import ButtonBar from './components/ButtonBar';
+import { Row } from 'react-bootstrap';
 
 export default function HomePage() {
       //The array that contains all the notes.
       const [noteList, setNoteList] = useState([]);
+      //State used to determine if there was an update to the users data.
+      const [previousData, setPreviousData] = useState([]);
 
       //Fetch values from supabase
       useEffect(() => {
@@ -17,11 +21,17 @@ export default function HomePage() {
       {
         const { data } = await supabase.from("Tasks").select();
         setNoteList(data);
+        if(data.toString() != previousData.toString())
+        {
+          setPreviousData(data);
+          //Update the display with the data that was fetched.
+          updateDisplay(data);
+        }
       }
       //Add a row to supabase
-      async function addRow(newEntry)
+      async function addRow(newEntry, type)
       {
-        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry}]);
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:type}]);
         if(error) console.error("Insert error:", error);
         //Refresh the list. In the future this will not be necessary.
         else {
@@ -38,6 +48,9 @@ export default function HomePage() {
 
       //A state to hold the text of the input text area
       const [inputText, setInputText] = useState('');
+
+      //Used by the List component. Contains the html that needs to be displayed to the user.
+      const [display, setDisplay] = useState([]);
       
       //Setter for isWritingNote
       const setNoteState = (noteState) => {
@@ -63,9 +76,66 @@ export default function HomePage() {
         setEntryNumber(latestEntryNumber + 1);
 
         //Add the note to supabase
-        addRow(inputText);
+        addRow(inputText, type);
         setInputText('');
       }
+
+  //updates the display state for the list component.
+  function updateDisplay(list)
+  {
+    //List of row elements
+    let rowList = [];
+    //Used by the for loop to contain all children of the row
+    let childList = [];
+
+    //Run this for each note entry
+    for(let count = 0; count < list.length; count++)
+    {
+      //Ensure each row only contains 3 entries
+      if(count % 3 == 0 && count != 0)
+      {
+        addRow();
+      }
+
+      //Add the note entry to the child list
+      childList.push(list[count]);
+
+      //If we're at the end of the list, push the final row early.
+      if(count == list.length - 1 && childList.length > 0)
+      {
+        //Create fake entries to ensure consistent spacing.
+        while(childList.length < 3)
+        {
+          childList.push('');
+        }
+        addRow();
+      }
+    }
+
+    //Update the display state
+    setDisplay(rowList);
+
+    //Adds the row to the list and resets the child list
+    function addRow()
+    {
+      rowList.push(
+        <Row key={crypto.randomUUID() }>
+          {childList.map((item) => (
+            createNote(item)
+          ))}
+        </Row>);
+
+      childList = [];
+    }
+
+    //Creates a not component from a note entry
+    function createNote(item)
+    {
+      return(
+        <Note item={item} key={item.id ? item.id : crypto.randomUUID()}/>
+      );
+    }
+  }
     
     return(
       <main id="home">
@@ -83,7 +153,7 @@ export default function HomePage() {
             inputTextHandler={setInputTextAreaFromEvent}
           />
           <List 
-            noteList={noteList}
+            display={display}
           />
       </main>
     );

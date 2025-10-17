@@ -29,7 +29,7 @@
     "./dist/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/page.jsx", "src/app/components/Top.jsx", "src/app/components/Top.jsx"  ],
+, "src/app/page.jsx", "src/app/components/Top.jsx", "src/app/components/Top.jsx", "src/app/components/List.jsx"  ],
   "exclude": [
     "node_modules"
   ]
