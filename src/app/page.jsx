@@ -29,9 +29,9 @@ export default function HomePage() {
         }
       }
       //Add a row to supabase
-      async function addRow(newEntry, newType, newTitle)
+      async function addRow(newEntry, newType, newTitle, newDate)
       {
-        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle}]);
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate}]);
         if(error) console.error("Insert error:", error);
         //Refresh the list. In the future this will not be necessary.
         else {
@@ -50,6 +50,8 @@ export default function HomePage() {
       const [inputText, setInputText] = useState('');
       //A state to hold the text of the input title area
       const [inputTitle, setInputTitle] = useState('');
+      //A state to hold the date of the due date area
+      const [inputDate, setInputDate] = useState('');
 
       //Used by the List component. Contains the html that needs to be displayed to the user.
       const [display, setDisplay] = useState([]);
@@ -73,19 +75,32 @@ export default function HomePage() {
       const setInputTitleFromEvent = (event) => {
         setInputTitle(event.target.value);
       };
+
+      //Setter for input date
+      const setInputDateFromEvent = (event) => {
+        setInputDate(event.target.value);
+      };
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
         console.log("Adding new note to the list.");
+
+        let dateToPush = null;
+        //Dont push the date if we're making a note
+        if(type != "note")
+        {
+          dateToPush = inputDate;
+        }
     
         //Add a client side note. In the future, an icon should display to show if it has loaded in supabase. That way the list does not need to be refreshed.
-        setNoteList([...noteList, {text:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID()}]);
+        setNoteList([...noteList, {text:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush}]);
         setEntryNumber(latestEntryNumber + 1);
 
         //Add the note to supabase
-        addRow(inputText, type, inputTitle);
+        addRow(inputText, type, inputTitle, dateToPush);
         setInputText('');
         setInputTitle('');
+        setInputDate('');
       }
 
   //updates the display state for the list component.
@@ -153,14 +168,17 @@ export default function HomePage() {
             taskState={setTaskState} 
             currentTaskState={isWritingTask} 
             noteList={addNoteToList}
+            titleReference={inputTitle}
           />
           <Create 
             noteState={isWritingNote} 
             taskState={isWritingTask} 
             textReference={inputText} 
             titleReference={inputTitle}
+            dateReference={inputDate}
             inputTextHandler={setInputTextAreaFromEvent}
             inputTitleHandler={setInputTitleFromEvent}
+            inputDateHandler={setInputDateFromEvent}
           />
           <List 
             display={display}

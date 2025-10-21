@@ -17,28 +17,63 @@ function ButtonBar(props)
     const [noteVariant, setNoteVariant] = useState('primary');
     const [taskVariant, setTaskVariant] = useState('primary');
 
-    //Function ran by the note button.
-    const handleNoteClick = () => {
-        if(props.currentNoteState === true || props.currentTaskState === true)
+    function resetBar()
+    {
+        //Reset buttonbar.
+        setNoteText(defaultNoteText);
+        setTaskText(defaultTaskText);
+        setNoteVariant("primary");
+        setTaskVariant("primary");
+        props.noteState(false);
+        props.taskState(false);
+    }
+
+    function changeBar()
+    {
+        //change the bar for use with create component.
+        setNoteText("Finish");
+        setNoteVariant("success");
+        setTaskText("Cancel");
+        setTaskVariant("danger");
+    }
+
+    function checkReqs()
+    {
+        if (!props.titleReference.trim()) 
         {
-            if(props.currentTaskState === false)
-            {
-                props.noteList("note");
-            }
-            
-            setNoteText(defaultNoteText);
-            setTaskText(defaultTaskText);
-            setNoteVariant("primary");
-            setTaskVariant("primary");
-            props.noteState(false);
-            props.taskState(false);
+            alert('Title is required.');
+            return false;
         }
         else
         {
-            setNoteText("Finish");
-            setNoteVariant("success");
-            setTaskText("Cancel");
-            setTaskVariant("danger");
+            return true;
+        }
+    }
+
+
+    //Function ran by the note button.
+    const handleNoteClick = () => {
+        //If the create component is currently being drawn-
+        if(props.currentNoteState === true || props.currentTaskState === true)
+        {
+            //Ensure title and other required input is present.
+            if(checkReqs() == false) return;
+
+            //Add the input to the list of notes
+            if(props.currentNoteState === true)
+            {
+                props.noteList("note");
+            }
+            else
+            {
+                props.noteList("task");
+            }
+            
+            resetBar();
+        }
+        else
+        {
+            changeBar();
             props.noteState(true);
         }
     }
@@ -47,24 +82,12 @@ function ButtonBar(props)
     const handleTaskClick = () => {
         if(props.currentTaskState === true || props.currentNoteState === true)
         {
-            if(props.currentNoteState === false)
-            {
-                props.noteList("task");
-            }
-
-            setNoteText(defaultNoteText);
-            setTaskText(defaultTaskText);
-            setNoteVariant("primary");
-            setTaskVariant("primary");
-            props.noteState(false);
-            props.taskState(false);
+            //don't push the input.
+            resetBar();
         }
         else
         {
-            setNoteText("Cancel");
-            setNoteVariant("danger");
-            setTaskText("Finish");
-            setTaskVariant("success");
+            changeBar();
             props.taskState(true);
         }
     }
