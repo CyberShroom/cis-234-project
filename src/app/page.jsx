@@ -14,11 +14,17 @@ export default function HomePage() {
       const [previousData, setPreviousData] = useState([]);
 
       //Fetch values from supabase
+      const [initialFetch, setInitialFetch] = useState(false);
       useEffect(() => {
-        fetchNoteList();
+        if(initialFetch === false)
+        {
+          fetchNoteList();
+          setInitialFetch(true);
+        }
       });
       async function fetchNoteList() 
       {
+        console.log("Fetching Data from Supabase.")
         const { data } = await supabase.from("Tasks").select();
         setNoteList(data);
         if(data.toString() != previousData.toString())
@@ -26,13 +32,14 @@ export default function HomePage() {
           setPreviousData(data);
           //Update the display with the data that was fetched.
           updateDisplay(data);
+          console.log("Data Fetched Successfully.")
         }
       }
       //Add a row to supabase
       async function addRow(newEntry, newType, newTitle, newDate)
       {
         const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate}]);
-        if(error) console.error("Insert error:", error);
+        if(error) console.error("Insert error:", error.message);
         //Refresh the list. In the future this will not be necessary.
         else {
           fetchNoteList();
@@ -87,14 +94,17 @@ export default function HomePage() {
 
         let dateToPush = null;
         //Dont push the date if we're making a note
-        if(type != "note")
+        if(type != "note" && inputDate != '')
         {
           dateToPush = inputDate;
         }
     
-        //Add a client side note. In the future, an icon should display to show if it has loaded in supabase. That way the list does not need to be refreshed.
-        setNoteList([...noteList, {text:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush}]);
+        //Add a client side note.
+        setNoteList([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false}]);
         setEntryNumber(latestEntryNumber + 1);
+
+        //Add note to the display
+        updateDisplay([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false}]);
 
         //Add the note to supabase
         addRow(inputText, type, inputTitle, dateToPush);
@@ -106,6 +116,7 @@ export default function HomePage() {
   //updates the display state for the list component.
   function updateDisplay(list)
   {
+    console.log(list);
     //List of row elements
     let rowList = [];
     //Used by the for loop to contain all children of the row
@@ -151,7 +162,7 @@ export default function HomePage() {
       childList = [];
     }
 
-    //Creates a not component from a note entry
+    //Creates a note component from a note entry
     function createNote(item)
     {
       return(

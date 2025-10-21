@@ -1,5 +1,6 @@
 import { Col } from 'react-bootstrap';
 import '../styles/note.css';
+import { useState } from 'react';
 
 function Note(props)
 {
@@ -15,10 +16,13 @@ function Note(props)
     }
     else
     {
+
+
         //Ternary returns input if the task is a task, or nothing if its a note.
         return(
             <Col className="note-div mb-1 me-1" >
                 {props.item.type == "note" ? null : <input type="checkbox"/>}
+                {props.item.success === false ? '❌' : '✅'}
                 <h2 className="page-title">{props.item.title}</h2>
                 <p>{props.item.content}</p>
             </Col>
