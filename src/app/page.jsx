@@ -53,9 +53,13 @@ export default function HomePage() {
       async function updateRow(noteID, newChecked)
       {
         const {data, error} = await supabase.from("Tasks").update({is_checked:newChecked}).eq('id', noteID).select();
-        if(error) console.error("Update error:", error.message);
+        if(error)
+        {
+           sendAlert("Failed to update row: " + error.message, "danger");
+        }
         //Refresh the list.
         else {
+          sendAlert("Update was successful.", "success");
           fetchNoteList();
         }
       }
