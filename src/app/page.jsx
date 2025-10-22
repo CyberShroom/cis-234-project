@@ -5,6 +5,7 @@ import List from './components/List';
 import Note from './components/Note';
 import Create from './components/Create';
 import ButtonBar from './components/ButtonBar';
+import Status from './components/Status';
 import { Row } from 'react-bootstrap';
 
 export default function HomePage() {
@@ -24,25 +25,27 @@ export default function HomePage() {
       });
       async function fetchNoteList() 
       {
-        console.log("Fetching Data from Supabase.")
         const { data } = await supabase.from("Tasks").select().order("entry_number", {ascending:true});
         setNoteList(data);
-        setEntryNumber(data.length + 1);
+        setEntryNumber(data[data.length - 1].entry_number + 1);
         if(data.toString() != previousData.toString())
         {
           setPreviousData(data);
           //Update the display with the data that was fetched.
           updateDisplay(data);
-          console.log("Data Fetched Successfully.")
         }
       }
       //Add a row to supabase
       async function addRow(newEntry, newType, newTitle, newDate, newEntryNumber)
       {
         const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate, entry_number:newEntryNumber}]);
-        if(error) console.error("Insert error:", error.message);
+        if(error) 
+        {
+          sendAlert("Failed to insert row: " + error.message, "danger");
+        }
         //Refresh the list
         else {
+          sendAlert("Insert was successful.", "success");
           fetchNoteList();
         }
       }
@@ -73,6 +76,13 @@ export default function HomePage() {
 
       //Used by the List component. Contains the html that needs to be displayed to the user.
       const [display, setDisplay] = useState([]);
+
+      //The message the alert box will display
+      const [alertMessage, setAlertMessage] = useState('');
+      //Whether the alert box should display
+      const [showAlert, setShowAlert] = useState(false);
+      //The variant for the alert box to use
+      const [alertVariant, setAlertVariant] = useState("error")
       
       //Setter for isWritingNote
       const setNoteState = (noteState) => {
@@ -198,6 +208,14 @@ export default function HomePage() {
       );
     }
   }
+
+  function sendAlert(message, variant)
+  {
+    setAlertMessage(message);
+    setAlertVariant(variant);
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 3000);
+  }
     
     return(
       <main id="home">
@@ -221,6 +239,11 @@ export default function HomePage() {
           />
           <List 
             display={display}
+          />
+          <Status 
+            message={alertMessage}
+            status={showAlert}
+            variant={alertVariant}
           />
       </main>
     );
