@@ -4,6 +4,16 @@ import { useState } from 'react';
 
 function Note(props)
 {
+    //a flag to determine if the text should be struck.
+    const [isStrike, setIsStrike] = useState(props.item.is_checked);
+
+    const changeText = (event) => {
+        //Set the text strikethrough depending on the check state.
+        setIsStrike(event.target.checked);
+
+        props.checkHandler(props.item.id, event.target.checked);
+    }
+
     //Check if item is a fake entry or not.
     if(props.item.content == null)
     {
@@ -16,15 +26,13 @@ function Note(props)
     }
     else
     {
-
-
         //Ternary returns input if the task is a task, or nothing if its a note.
         return(
             <Col className="note-div mb-1 me-1" >
-                {props.item.type == "note" ? null : <input type="checkbox"/>}
+                {props.item.type == "note" ? null : <input type="checkbox" onChange={changeText} checked={props.item.is_checked}/>}
                 {props.item.success === false ? '❌' : '✅'}
                 <h2 className="page-title">{props.item.title}</h2>
-                <p>{props.item.content}</p>
+                <p style={{ textDecoration: isStrike ? 'line-through' : 'none'}}>{props.item.content}</p>
             </Col>
         );
     }

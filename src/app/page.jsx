@@ -26,6 +26,7 @@ export default function HomePage() {
       {
         console.log("Fetching Data from Supabase.")
         const { data } = await supabase.from("Tasks").select();
+        let newList = sortFetchedList(data);
         setNoteList(data);
         if(data.toString() != previousData.toString())
         {
@@ -40,7 +41,17 @@ export default function HomePage() {
       {
         const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate}]);
         if(error) console.error("Insert error:", error.message);
-        //Refresh the list. In the future this will not be necessary.
+        //Refresh the list
+        else {
+          fetchNoteList();
+        }
+      }
+      //Update a row in supabase
+      async function updateRow(noteID, newChecked)
+      {
+        const {data, error} = await supabase.from("Tasks").update({is_checked:newChecked}).eq('id', noteID).select();
+        if(error) console.error("Update error:", error.message);
+        //Refresh the list.
         else {
           fetchNoteList();
         }
@@ -87,6 +98,20 @@ export default function HomePage() {
       const setInputDateFromEvent = (event) => {
         setInputDate(event.target.value);
       };
+
+      //sorts the notes in numerical order (WIP
+      function sortFetchedList(data)
+      {
+        let newList = [];
+        let noNumber = [];
+
+        for(let i = 0; i < data.length; i++)
+        {
+
+        }
+
+        return null;
+      }
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
@@ -113,10 +138,22 @@ export default function HomePage() {
         setInputDate('');
       }
 
+    //This is ran when the user checks a task complete or incomplete.
+    const onNoteCheck = (noteID, isChecked) => {
+      //Replace the old value (Updates the client side)
+      setNoteList((prev) => {
+        let newList = prev.map((item) => (item.id == noteID ? {...item, is_checked:isChecked, success:false} : item));
+        updateDisplay(newList);
+        return newList;
+      });
+
+      //Update the supabase row to reflect the change
+      updateRow(noteID, isChecked);
+    }
+
   //updates the display state for the list component.
   function updateDisplay(list)
   {
-    console.log(list);
     //List of row elements
     let rowList = [];
     //Used by the for loop to contain all children of the row
@@ -166,7 +203,11 @@ export default function HomePage() {
     function createNote(item)
     {
       return(
-        <Note item={item} key={item.id ? item.id : crypto.randomUUID()}/>
+        <Note 
+          item={item} 
+          key={item.id ? item.id : crypto.randomUUID()}
+          checkHandler={onNoteCheck}
+        />
       );
     }
   }
