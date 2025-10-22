@@ -25,9 +25,9 @@ export default function HomePage() {
       async function fetchNoteList() 
       {
         console.log("Fetching Data from Supabase.")
-        const { data } = await supabase.from("Tasks").select();
-        let newList = sortFetchedList(data);
+        const { data } = await supabase.from("Tasks").select().order("entry_number", {ascending:true});
         setNoteList(data);
+        setEntryNumber(data.length + 1);
         if(data.toString() != previousData.toString())
         {
           setPreviousData(data);
@@ -37,9 +37,9 @@ export default function HomePage() {
         }
       }
       //Add a row to supabase
-      async function addRow(newEntry, newType, newTitle, newDate)
+      async function addRow(newEntry, newType, newTitle, newDate, newEntryNumber)
       {
-        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate}]);
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate, entry_number:newEntryNumber}]);
         if(error) console.error("Insert error:", error.message);
         //Refresh the list
         else {
@@ -62,7 +62,7 @@ export default function HomePage() {
       const [isWritingTask, setIsWritingTask] = useState(false);
     
       //Used when making new notes to determine the entry number.
-      const [latestEntryNumber, setEntryNumber] = useState(0);
+      const [latestEntryNumber, setEntryNumber] = useState(1);
 
       //A state to hold the text of the input text area
       const [inputText, setInputText] = useState('');
@@ -98,20 +98,6 @@ export default function HomePage() {
       const setInputDateFromEvent = (event) => {
         setInputDate(event.target.value);
       };
-
-      //sorts the notes in numerical order (WIP
-      function sortFetchedList(data)
-      {
-        let newList = [];
-        let noNumber = [];
-
-        for(let i = 0; i < data.length; i++)
-        {
-
-        }
-
-        return null;
-      }
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
@@ -125,14 +111,15 @@ export default function HomePage() {
         }
     
         //Add a client side note.
-        setNoteList([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false}]);
+        setNoteList([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false, entry_number:latestEntryNumber}]);
+        //update the entry number
         setEntryNumber(latestEntryNumber + 1);
 
         //Add note to the display
-        updateDisplay([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false}]);
+        updateDisplay([...noteList, {content:inputText, entryNumber:latestEntryNumber + 1, type:type, title:inputTitle, id:crypto.randomUUID(), date:dateToPush, success:false, entry_number:latestEntryNumber}]);
 
         //Add the note to supabase
-        addRow(inputText, type, inputTitle, dateToPush);
+        addRow(inputText, type, inputTitle, dateToPush, latestEntryNumber);
         setInputText('');
         setInputTitle('');
         setInputDate('');

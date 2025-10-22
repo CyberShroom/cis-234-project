@@ -31,6 +31,7 @@ function Note(props)
             <Col className="note-div mb-1 me-1" >
                 {props.item.type == "note" ? null : <input type="checkbox" onChange={changeText} checked={props.item.is_checked}/>}
                 {props.item.success === false ? '❌' : '✅'}
+                <p>#{props.item.entry_number}</p>
                 <h2 className="page-title">{props.item.title}</h2>
                 <p style={{ textDecoration: isStrike ? 'line-through' : 'none'}}>{props.item.content}</p>
             </Col>
