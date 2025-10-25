@@ -213,13 +213,12 @@ export default function HomePage() {
     }
   }
 
-  function sendAlert(message, variant)
-  {
+  const sendAlert = (message, variant) => {
     setAlertMessage(message);
     setAlertVariant(variant);
     setShowAlert(true);
     setTimeout(() => setShowAlert(false), 3000);
-  }
+  };
     
     return(
       <main id="home">
@@ -230,6 +229,7 @@ export default function HomePage() {
             currentTaskState={isWritingTask} 
             noteList={addNoteToList}
             titleReference={inputTitle}
+            alert={sendAlert}
           />
           <Create 
             noteState={isWritingNote} 

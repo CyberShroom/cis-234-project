@@ -41,7 +41,7 @@ function ButtonBar(props)
     {
         if (!props.titleReference.trim()) 
         {
-            alert('Title is required.');
+            props.alert('Title is required.', 'danger')
             return false;
         }
         else
