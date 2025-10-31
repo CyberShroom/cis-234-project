@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import supabase from '../lib/supabase';
 import List from './components/List';
 import Note from './components/Note';
@@ -7,8 +7,12 @@ import Create from './components/Create';
 import ButtonBar from './components/ButtonBar';
 import Status from './components/Status';
 import { Row } from 'react-bootstrap';
+import Auth from './components/Auth';
 
 export default function HomePage() {
+      //State to hold user information
+      const [user, setUser] = useState(null);
+
       //The array that contains all the notes.
       const [noteList, setNoteList] = useState([]);
       //State used to determine if there was an update to the users data.
@@ -19,14 +23,25 @@ export default function HomePage() {
       useEffect(() => {
         if(initialFetch === false)
         {
-          fetchNoteList();
+          async function initialFetch(){
+            const { data: { user }  } = await supabase.auth.getUser();
+            setUser(user);
+
+            await fetchNoteList(user.id);
+          }
+
+          initialFetch();
           setInitialFetch(true);
         }
       });
-      async function fetchNoteList() 
+      async function fetchNoteList(id) 
       {
-        const { data } = await supabase.from("Tasks").select().order("entry_number", {ascending:true});
+        const { data } = await supabase.from("Tasks").select().order("entry_number", {ascending:true}).eq('user_id', id);
         setNoteList(data);
+
+        //No entries will result in errors. Return instead.
+        if(data.length == 0) return;
+
         setEntryNumber(data[data.length - 1].entry_number + 1);
         if(data.toString() != previousData.toString())
         {
@@ -38,7 +53,8 @@ export default function HomePage() {
       //Add a row to supabase
       async function addRow(newEntry, newType, newTitle, newDate, newEntryNumber)
       {
-        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate, entry_number:newEntryNumber}]);
+        console.log(user.id);
+        const {data, error} = await supabase.from("Tasks").insert([{content:newEntry, type:newType, title:newTitle, date:newDate, entry_number:newEntryNumber, user_id: user.id}]);
         if(error) 
         {
           sendAlert("Failed to insert row: " + error.message, "danger");
@@ -46,13 +62,13 @@ export default function HomePage() {
         //Refresh the list
         else {
           sendAlert("Insert was successful.", "success");
-          fetchNoteList();
+          fetchNoteList(user.id);
         }
       }
       //Update a row in supabase
-      async function updateRow(noteID, newChecked)
+      async function updateRow(noteID, newChecked, id)
       {
-        const {data, error} = await supabase.from("Tasks").update({is_checked:newChecked}).eq('id', noteID).select();
+        const {data, error} = await supabase.from("Tasks").update({is_checked:newChecked}).eq('id', noteID).eq('user_id', id).select();
         if(error)
         {
            sendAlert("Failed to update row: " + error.message, "danger");
@@ -60,7 +76,7 @@ export default function HomePage() {
         //Refresh the list.
         else {
           sendAlert("Update was successful.", "success");
-          fetchNoteList();
+          fetchNoteList(id);
         }
       }
       
@@ -139,6 +155,9 @@ export default function HomePage() {
         setInputDate('');
       }
 
+    //These values are used to fix an issue with notes.
+    const reference = useRef(user);
+    useEffect(() => {reference.current = user;}, [user]);
     //This is ran when the user checks a task complete or incomplete.
     const onNoteCheck = (noteID, isChecked) => {
       //Replace the old value (Updates the client side)
@@ -149,7 +168,7 @@ export default function HomePage() {
       });
 
       //Update the supabase row to reflect the change
-      updateRow(noteID, isChecked);
+      updateRow(noteID, isChecked, reference.current.id);
     }
 
   //updates the display state for the list component.
@@ -214,6 +233,7 @@ export default function HomePage() {
   }
 
   const sendAlert = (message, variant) => {
+    console.log(message);
     setAlertMessage(message);
     setAlertVariant(variant);
     setShowAlert(true);
@@ -222,6 +242,7 @@ export default function HomePage() {
     
     return(
       <main id="home">
+          <Auth/>
           <ButtonBar 
             noteState={setNoteState} 
             currentNoteState={isWritingNote} 
