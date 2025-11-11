@@ -8,6 +8,7 @@ import ButtonBar from './components/ButtonBar';
 import Status from './components/Status';
 import { Row } from 'react-bootstrap';
 import Auth from './components/Auth';
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
       //State to hold user information
@@ -21,17 +22,13 @@ export default function HomePage() {
       //Fetch values from supabase
       const [initialFetch, setInitialFetch] = useState(false);
       useEffect(() => {
-        if(initialFetch === false)
+        //If the initial fetch has not run successfully and user is not null
+        if(!initialFetch && user)
         {
-          async function initialFetch(){
-            const { data: { user }  } = await supabase.auth.getUser();
-            setUser(user);
-
-            await fetchNoteList(user.id);
-          }
-
-          initialFetch();
+          fetchNoteList(user.id);
           setInitialFetch(true);
+
+          console.log("Initial Fetch Completed Successfully.");
         }
       });
       async function fetchNoteList(id) 
@@ -43,6 +40,8 @@ export default function HomePage() {
         if(data.length == 0) return;
 
         setEntryNumber(data[data.length - 1].entry_number + 1);
+        
+        //Update the display if the new data that was fetched does not match the data of the last fetch.
         if(data.toString() != previousData.toString())
         {
           setPreviousData(data);
@@ -128,6 +127,11 @@ export default function HomePage() {
       const setInputDateFromEvent = (event) => {
         setInputDate(event.target.value);
       };
+
+      //Setter for user
+      const setUserFromAuth = (newUser) => {
+        setUser(newUser);
+      };
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
@@ -154,22 +158,6 @@ export default function HomePage() {
         setInputTitle('');
         setInputDate('');
       }
-
-    //These values are used to fix an issue with notes.
-    const reference = useRef(user);
-    useEffect(() => {reference.current = user;}, [user]);
-    //This is ran when the user checks a task complete or incomplete.
-    const onNoteCheck = (noteID, isChecked) => {
-      //Replace the old value (Updates the client side)
-      setNoteList((prev) => {
-        let newList = prev.map((item) => (item.id == noteID ? {...item, is_checked:isChecked, success:false} : item));
-        updateDisplay(newList);
-        return newList;
-      });
-
-      //Update the supabase row to reflect the change
-      updateRow(noteID, isChecked, reference.current.id);
-    }
 
   //updates the display state for the list component.
   function updateDisplay(list)
@@ -218,8 +206,9 @@ export default function HomePage() {
 
       childList = [];
     }
+  }
 
-    //Creates a note component from a note entry
+  //Creates a note component from a note entry
     function createNote(item)
     {
       return(
@@ -230,7 +219,19 @@ export default function HomePage() {
         />
       );
     }
-  }
+
+    //This is ran when the user checks a task complete or incomplete.
+    const onNoteCheck = (noteID, isChecked) => {
+      //Replace the old value (Updates the client side)
+      setNoteList((prev) => {
+        let newList = prev.map((item) => (item.id == noteID ? {...item, is_checked:isChecked, success:false} : item));
+        updateDisplay(newList);
+        return newList;
+      });
+
+      //Update the supabase row to reflect the change
+      updateRow(noteID, isChecked, user.id);
+    }
 
   const sendAlert = (message, variant) => {
     console.log(message);
@@ -242,7 +243,9 @@ export default function HomePage() {
     
     return(
       <main id="home">
-          <Auth/>
+          <Auth
+            userHandler={setUserFromAuth}
+          />
           <ButtonBar 
             noteState={setNoteState} 
             currentNoteState={isWritingNote} 
@@ -262,9 +265,7 @@ export default function HomePage() {
             inputTitleHandler={setInputTitleFromEvent}
             inputDateHandler={setInputDateFromEvent}
           />
-          <List 
-            display={display}
-          />
+          {user ? <List display={display}/> : <h2>Loading User Data...</h2>}
           <Status 
             message={alertMessage}
             status={showAlert}
