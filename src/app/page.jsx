@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '../lib/supabase';
 import List from './components/List';
 import Note from './components/Note';
@@ -8,7 +8,6 @@ import ButtonBar from './components/ButtonBar';
 import Status from './components/Status';
 import { Row } from 'react-bootstrap';
 import Auth from './components/Auth';
-import { useRouter } from "next/navigation";
 
 export default function HomePage() {
       //State to hold user information

@@ -3,6 +3,7 @@ import { useState } from "react";
 import supabase from '../../lib/supabase';
 import Status from "../components/Status";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import Auth from "../components/Auth";
 
 export default function LoginPage() {
     //Login info
@@ -39,6 +40,7 @@ export default function LoginPage() {
     return( 
     <main>
         <div className="content">
+            <Auth/>
             <Row>
                 <Col>
                     <Form onSubmit={handleSignup} className="p-3">
