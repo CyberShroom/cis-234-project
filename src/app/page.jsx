@@ -6,7 +6,7 @@ import Note from './components/Note';
 import Create from './components/Create';
 import ButtonBar from './components/ButtonBar';
 import Status from './components/Status';
-import { Row } from 'react-bootstrap';
+import { Row, Form} from 'react-bootstrap';
 import Auth from './components/Auth';
 
 export default function HomePage() {
@@ -101,6 +101,9 @@ export default function HomePage() {
       const [showAlert, setShowAlert] = useState(false);
       //The variant for the alert box to use
       const [alertVariant, setAlertVariant] = useState("error")
+
+      //State to hold the search term
+      const [searchTerm, setSearchTerm] = useState("");
       
       //Setter for isWritingNote
       const setNoteState = (noteState) => {
@@ -131,6 +134,45 @@ export default function HomePage() {
       const setUserFromAuth = (newUser) => {
         setUser(newUser);
       };
+
+      //Sets the search term and updates the display with only notes that match
+      const searchForNotes = (search) => {
+        setSearchTerm(search);
+
+        //Filter the notes list.
+        //This is the server version. The final application will run client side filtering instead.
+        searchForNotesServer(search);
+
+        //client side filtering. Disabled for this assignment.
+        /*
+        let searchNotes = noteList.filter((item) => (item.title.toLowerCase().includes(search.toLowerCase())));
+        updateDisplay(searchNotes);
+        sendAlert("No notes matched the search term.", "warning");
+        */
+      };
+      //Server Version for the assignment.
+      async function searchForNotesServer(search) {
+        //Fetch from supabase
+        const { data, error } = await supabase.from("Tasks").select().order("entry_number", {ascending:true}).eq('user_id', user.id).ilike("title", `%${search}%`);
+
+        //error checking
+        if(error) {
+          console.error("Error fetching notes: ", error.message);
+          sendAlert("Error fetching notes: ", error.message, "danger");
+        }
+        else {
+          //Set the note list state with only the searched terms
+          setNoteList(data);
+
+          //Do not continue if there is no data
+          if(data.length == 0) {
+            sendAlert("No notes matched the search term.", "warning");
+          }
+
+          //Update the display. DO NOT SET THE ENTRY NUMBER!!!
+          updateDisplay(data);
+        }
+      }
     
       //Adds a note to the array of notes.
       const addNoteToList = (type) => {
@@ -264,6 +306,15 @@ export default function HomePage() {
             inputTitleHandler={setInputTitleFromEvent}
             inputDateHandler={setInputDateFromEvent}
           />
+          {user ? 
+          <Form.Control
+            type="text"
+            placeholder="Search notes..."
+            value={searchTerm}
+            onChange={(e) => searchForNotes(e.target.value)}
+            className="mb-3"
+          />
+          : null}
           {user ? <List display={display}/> : <h2>Loading User Data...</h2>}
           <Status 
             message={alertMessage}
