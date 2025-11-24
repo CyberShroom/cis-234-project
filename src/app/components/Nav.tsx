@@ -11,6 +11,7 @@ function Nav()
             <Link href="/" className='nav-link'><Button variant='primary' className='stack-button'>Home</Button></Link>
             <Link href="/about" className='nav-link'><Button variant='primary' className='stack-button'>About</Button></Link>
             <Link href="/contact" className='nav-link'><Button variant='primary' className='stack-button'>Contact</Button></Link>
+            <Link href="/faq" className='nav-link'><Button variant='primary' className='stack-button'>FAQ</Button></Link>
             <div></div>
         </Stack>
     );
