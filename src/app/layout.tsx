@@ -7,7 +7,7 @@ import Nav from './components/Nav';
 import Top from './components/Top';
  
 export const metadata: Metadata = {
-  title: 'Next + React',
+  title: 'Task App',
   description: 'Task App WIP',
 }
 

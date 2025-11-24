@@ -312,7 +312,7 @@ export default function HomePage() {
             placeholder="Search notes..."
             value={searchTerm}
             onChange={(e) => searchForNotes(e.target.value)}
-            className="mb-3"
+            className="mb-1 my-1 border-5 border-primary"
           />
           : null}
           {user ? <List display={display}/> : <h2>Loading User Data...</h2>}
