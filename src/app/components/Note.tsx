@@ -1,4 +1,4 @@
-import { Col } from 'react-bootstrap';
+import { Col, Button, Stack } from 'react-bootstrap';
 import '../styles/note.css';
 import { useState } from 'react';
 
@@ -12,6 +12,10 @@ function Note(props)
         setIsStrike(event.target.checked);
 
         props.checkHandler(props.item.id, event.target.checked);
+    }
+
+    const handleEditClick = () => {
+        props.edit(props.item.entry_number, props.item.type, props.item.content, props.item.title, props.item.date);
     }
 
     //Check if item is a fake entry or not.
@@ -34,6 +38,12 @@ function Note(props)
                 <p>#{props.item.entry_number}</p>
                 <h2 className="page-title">{props.item.title}</h2>
                 <p style={{ textDecoration: isStrike ? 'line-through' : 'none'}}>{props.item.content}</p>
+                <Stack className="justify-content-center" direction='horizontal'><p>{props.item.date}</p></Stack>
+                <Stack className="justify-content-center" direction='horizontal' gap={5}>
+                    <Button variant='outline-primary' onClick={handleEditClick}>Edit</Button>
+                    <Button variant='outline-danger'>Delete</Button>
+                </Stack>
+                <p></p>
             </Col>
         );
     }

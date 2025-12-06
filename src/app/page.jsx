@@ -77,6 +77,19 @@ export default function HomePage() {
           fetchNoteList(id);
         }
       }
+      //Edit the text of a note in supabase
+      async function editRow(noteID, newText, newTitle, id) {
+        const {data, error} = await supabase.from("Tasks").update({content:newText, title:newTitle}).eq('id', noteID).eq('user_id', id).select();
+        if(error)
+        {
+           sendAlert("Failed to edit text: " + error.message, "danger");
+        }
+        //Refresh the list.
+        else {
+          sendAlert("Edit was successful.", "success");
+          fetchNoteList(id);
+        }
+      }
       
       //Booleans that determine whether a note or task is being created.
       const [isWritingNote, setIsWritingNote] = useState(false);
@@ -104,6 +117,9 @@ export default function HomePage() {
 
       //State to hold the search term
       const [searchTerm, setSearchTerm] = useState("");
+
+      //State to track if a note is being edited
+      const [editNumber, setEditNumber] = useState(-1);
       
       //Setter for isWritingNote
       const setNoteState = (noteState) => {
@@ -135,20 +151,79 @@ export default function HomePage() {
         setUser(newUser);
       };
 
+      //Sets the edit id and tells the create component to draw.
+      const startEdit = (id, type, content, title, date) => {
+        //Dont edit another note while one is being edited.
+        setEditNumber((prev) => {
+          if(prev > 0) {
+            sendAlert("A note is already being edited.", "warning");
+            return prev;
+          }
+          else {
+            //Draw based on the type of note
+            if(type == "note") {
+              setNoteState(true);
+              setInputTitle(title);
+              setInputText(content);
+            }
+            else
+            {
+              setTaskState(true);
+              setInputTitle(title);
+              setInputText(content);
+              setInputDate(date);
+            }
+            return id;
+          }
+        });
+      }
+
+      const endEdit = (command) => {
+        if(command == "finish") {
+          //Call supabase and edit the notes text
+          //Replace the old value (Updates the client side)
+          let newList = noteList.map((item) => (item.entry_number == editNumber ? {...item, content:inputText, title:inputTitle, success:false} : item));
+          let noteID = noteList.find(item => item.entry_number == editNumber).id;
+
+          setNoteList(newList);
+          updateDisplay(newList);
+
+          //Update the supabase row to reflect the change
+          editRow(noteID, inputText, inputTitle, user.id);
+
+          setInputText('');
+          setInputTitle('');
+          setInputDate('');
+          setEditNumber(-1);
+        }
+        else if(command == "cancel") {
+          //Reset the edit state and close the create component.
+          setInputText('');
+          setInputTitle('');
+          setInputDate('');
+          setEditNumber(-1);
+        }
+        else {
+          sendAlert("Unknown command recieved. Edit attempt will fail!", "danger");
+        }
+      }
+
       //Sets the search term and updates the display with only notes that match
       const searchForNotes = (search) => {
         setSearchTerm(search);
 
         //Filter the notes list.
         //This is the server version. The final application will run client side filtering instead.
-        searchForNotesServer(search);
+        //searchForNotesServer(search);
 
-        //client side filtering. Disabled for this assignment.
-        /*
+        //client side filtering.
         let searchNotes = noteList.filter((item) => (item.title.toLowerCase().includes(search.toLowerCase())));
-        updateDisplay(searchNotes);
-        sendAlert("No notes matched the search term.", "warning");
-        */
+
+        if(searchNotes.length == 0) {
+          sendAlert("No notes matched the search term.", "warning");
+        }
+
+        updateDisplay(noteList);
       };
       //Server Version for the assignment.
       async function searchForNotesServer(search) {
@@ -203,6 +278,9 @@ export default function HomePage() {
   //updates the display state for the list component.
   function updateDisplay(list)
   {
+    //Check that the list matches the search term in case this is called after updating supabase
+    list = list.filter((item) => (item.title.toLowerCase().includes(searchTerm.toLowerCase())));
+
     //List of row elements
     let rowList = [];
     //Used by the for loop to contain all children of the row
@@ -257,6 +335,7 @@ export default function HomePage() {
           item={item} 
           key={item.id ? item.id : crypto.randomUUID()}
           checkHandler={onNoteCheck}
+          edit={startEdit}
         />
       );
     }
@@ -295,6 +374,8 @@ export default function HomePage() {
             noteList={addNoteToList}
             titleReference={inputTitle}
             alert={sendAlert}
+            editId={editNumber}
+            callEdit={endEdit}
           />
           <Create 
             noteState={isWritingNote} 

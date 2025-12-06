@@ -5,36 +5,10 @@ import '../styles/buttonbar.css'
 
 function ButtonBar(props)
 {
-    //Default values for the buttons
-    const defaultNoteText = "Create Note";
-    const defaultTaskText = "Create Task";
-
-    //The text of the buttons.
-    const [noteText, setNoteText] = useState(defaultNoteText);
-    const [taskText, setTaskText] = useState(defaultTaskText);
-
-    //The variant of the buttons
-    const [noteVariant, setNoteVariant] = useState('primary');
-    const [taskVariant, setTaskVariant] = useState('primary');
-
     function resetBar()
     {
-        //Reset buttonbar.
-        setNoteText(defaultNoteText);
-        setTaskText(defaultTaskText);
-        setNoteVariant("primary");
-        setTaskVariant("primary");
         props.noteState(false);
         props.taskState(false);
-    }
-
-    function changeBar()
-    {
-        //change the bar for use with create component.
-        setNoteText("Finish");
-        setNoteVariant("success");
-        setTaskText("Cancel");
-        setTaskVariant("danger");
     }
 
     function checkReqs()
@@ -59,6 +33,13 @@ function ButtonBar(props)
             //Ensure title and other required input is present.
             if(checkReqs() == false) return;
 
+            //First, check if the user is editing a note.
+            if(props.editId >= 0) {
+                props.callEdit("finish");
+                resetBar()
+                return;
+            }
+
             //Add the input to the list of notes
             if(props.currentNoteState === true)
             {
@@ -73,7 +54,6 @@ function ButtonBar(props)
         }
         else
         {
-            changeBar();
             props.noteState(true);
         }
     }
@@ -82,13 +62,57 @@ function ButtonBar(props)
     const handleTaskClick = () => {
         if(props.currentTaskState === true || props.currentNoteState === true)
         {
+            //First, check if the user is editing a note.
+            if(props.editId >= 0) {
+                props.callEdit("cancel");
+            }
+
             //don't push the input.
             resetBar();
         }
         else
         {
-            changeBar();
             props.taskState(true);
+        }
+    }
+
+    function getNoteVariant() {
+        if(props.currentTaskState || props.currentNoteState) {
+            return "success";
+        }
+        else
+        {
+            return "primary";
+        }
+    }
+
+    function getTaskVariant() {
+        if(props.currentTaskState || props.currentNoteState) {
+            return "danger";
+        }
+        else
+        {
+            return "primary";
+        }
+    }
+
+    function getNoteText() {
+        if(props.currentTaskState || props.currentNoteState) {
+            return "Finish";
+        }
+        else
+        {
+            return "Create Note";
+        }
+    }
+
+    function getTaskText() {
+        if(props.currentTaskState || props.currentNoteState) {
+            return "Cancel";
+        }
+        else
+        {
+            return "Create Task";
         }
     }
 
@@ -96,8 +120,8 @@ function ButtonBar(props)
         <Row id='row3' className='sticky-top'>
             <Stack className="border p-3 bg-dark justify-content-center" id="button-bar" direction='horizontal' gap={5}>
                 <div></div>
-                <Button variant={noteVariant} className='stack-button' onClick={handleNoteClick}>{noteText}</Button>
-                <Button variant={taskVariant} className='stack-button' onClick={handleTaskClick}>{taskText}</Button>
+                <Button variant={getNoteVariant()} className='stack-button' onClick={handleNoteClick}>{getNoteText()}</Button>
+                <Button variant={getTaskVariant()} className='stack-button' onClick={handleTaskClick}>{getTaskText()}</Button>
                 <div></div>
             </Stack>
         </Row>
