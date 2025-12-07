@@ -90,6 +90,16 @@ export default function HomePage() {
           fetchNoteList(id);
         }
       }
+      async function deleteRow(noteID, id) {
+        const {data, error} = await supabase.from("Tasks").delete().eq('id', noteID).eq('user_id', id).select();
+        if(error) {
+          sendAlert("Failed to delete note: " + error.message, "danger");
+        }
+        else {
+          sendAlert("Note deleted successfully.", "success");
+          fetchNoteList(id);
+        }
+      }
       
       //Booleans that determine whether a note or task is being created.
       const [isWritingNote, setIsWritingNote] = useState(false);
@@ -206,6 +216,10 @@ export default function HomePage() {
         else {
           sendAlert("Unknown command recieved. Edit attempt will fail!", "danger");
         }
+      }
+
+      const deleteNote = (id) => {
+        deleteRow(id, user.id)
       }
 
       //Sets the search term and updates the display with only notes that match
@@ -336,6 +350,7 @@ export default function HomePage() {
           key={item.id ? item.id : crypto.randomUUID()}
           checkHandler={onNoteCheck}
           edit={startEdit}
+          delete={deleteNote}
         />
       );
     }

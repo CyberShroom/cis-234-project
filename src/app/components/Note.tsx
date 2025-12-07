@@ -18,6 +18,10 @@ function Note(props)
         props.edit(props.item.entry_number, props.item.type, props.item.content, props.item.title, props.item.date);
     }
 
+    const handleDeleteClick = () => {
+        props.delete(props.item.id);
+    }
+
     //Check if item is a fake entry or not.
     if(props.item.content == null)
     {
@@ -41,7 +45,7 @@ function Note(props)
                 <Stack className="justify-content-center" direction='horizontal'><p>{props.item.date}</p></Stack>
                 <Stack className="justify-content-center" direction='horizontal' gap={5}>
                     <Button variant='outline-primary' onClick={handleEditClick}>Edit</Button>
-                    <Button variant='outline-danger'>Delete</Button>
+                    <Button variant='outline-danger' onClick={handleDeleteClick}>Delete</Button>
                 </Stack>
                 <p></p>
             </Col>

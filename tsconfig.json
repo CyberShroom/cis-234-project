@@ -16,7 +16,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "plugins": [
       {
         "name": "next"
@@ -28,8 +28,17 @@
     "next-env.d.ts",
     "./dist/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/app/page.jsx", "src/app/components/Top.jsx", "src/app/components/Top.jsx", "src/app/components/List.tsx", "src/app/components/Auth.jsx", "src/app/not-found.js", "src/app/components/ButtonBar.jsx"  ],
+    "**/*.tsx",
+    "src/app/page.jsx",
+    "src/app/components/Top.jsx",
+    "src/app/components/Top.jsx",
+    "src/app/components/List.tsx",
+    "src/app/components/Auth.jsx",
+    "src/app/not-found.js",
+    "src/app/components/ButtonBar.jsx",
+    "dist/types/**/*.ts",
+    "dist/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
