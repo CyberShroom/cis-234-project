@@ -378,9 +378,6 @@ export default function HomePage() {
     
     return(
       <main id="home">
-          <Auth
-            userHandler={setUserFromAuth}
-          />
           <ButtonBar 
             noteState={setNoteState} 
             currentNoteState={isWritingNote} 
@@ -416,6 +413,9 @@ export default function HomePage() {
             message={alertMessage}
             status={showAlert}
             variant={alertVariant}
+          />
+          <Auth 
+            userHandler={setUserFromAuth}
           />
       </main>
     );

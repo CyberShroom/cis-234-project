@@ -44,6 +44,6 @@ export default function Auth(props)
   };
 
   return(
-    <Button onClick={logout}>Logout</Button>
+    <Button onClick={logout} className='sticky-bottom' variant="danger">Logout</Button>
   );
 }

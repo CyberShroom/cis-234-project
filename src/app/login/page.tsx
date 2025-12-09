@@ -40,7 +40,6 @@ export default function LoginPage() {
     return( 
     <main>
         <div className="content">
-            <Auth/>
             <Row>
                 <Col>
                     <Form onSubmit={handleSignup} className="p-3">
@@ -82,6 +81,7 @@ export default function LoginPage() {
                 </Col>
             </Row>
         </div>
+        <Auth/>
         <Status 
             message={alertMessage}
             status={showAlert}
