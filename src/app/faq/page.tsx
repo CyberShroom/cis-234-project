@@ -8,6 +8,7 @@ export default function FAQPage() {
                 <p>- Task completion</p>
                 <p>- Automatic redirect on logout and login</p>
                 <p>- Search feature</p>
+                <p>- Edit and delete notes</p>
             </div>
         </main>
     );

@@ -15,8 +15,6 @@ export default function HomePage() {
 
       //The array that contains all the notes.
       const [noteList, setNoteList] = useState([]);
-      //State used to determine if there was an update to the users data.
-      const [previousData, setPreviousData] = useState([]);
 
       //Fetch values from supabase
       const [initialFetch, setInitialFetch] = useState(false);
@@ -40,11 +38,14 @@ export default function HomePage() {
 
         setEntryNumber(data[data.length - 1].entry_number + 1);
         
-        //Update the display if the new data that was fetched does not match the data of the last fetch.
-        if(data.toString() != previousData.toString())
+        //Update the display with the data that was fetched.
+        //Check for a search term first
+        if(searchTerm) {
+          let searchData = data.filter((item) => (item.title.toLowerCase().includes(searchTerm.toLowerCase())));
+          updateDisplay(searchData);
+        }
+        else
         {
-          setPreviousData(data);
-          //Update the display with the data that was fetched.
           updateDisplay(data);
         }
       }
@@ -237,7 +238,7 @@ export default function HomePage() {
           sendAlert("No notes matched the search term.", "warning");
         }
 
-        updateDisplay(noteList);
+        updateDisplay(searchNotes);
       };
       //Server Version for the assignment.
       async function searchForNotesServer(search) {
@@ -293,7 +294,7 @@ export default function HomePage() {
   function updateDisplay(list)
   {
     //Check that the list matches the search term in case this is called after updating supabase
-    list = list.filter((item) => (item.title.toLowerCase().includes(searchTerm.toLowerCase())));
+    //list = list.filter((item) => (item.title.toLowerCase().includes(searchTerm.toLowerCase())));
 
     //List of row elements
     let rowList = [];
@@ -360,7 +361,11 @@ export default function HomePage() {
       //Replace the old value (Updates the client side)
       setNoteList((prev) => {
         let newList = prev.map((item) => (item.id == noteID ? {...item, is_checked:isChecked, success:false} : item));
-        updateDisplay(newList);
+
+        //Check for search term
+        let displayList = newList.filter((item) => (item.title.toLowerCase().includes(searchTerm.toLowerCase())));
+        updateDisplay(displayList);
+
         return newList;
       });
 
@@ -399,15 +404,17 @@ export default function HomePage() {
             inputTitleHandler={setInputTitleFromEvent}
             inputDateHandler={setInputDateFromEvent}
           />
-          {user ? 
-          <Form.Control
-            type="text"
-            placeholder="Search notes..."
-            value={searchTerm}
-            onChange={(e) => searchForNotes(e.target.value)}
-            className="mb-1 my-1 border-5 border-primary"
-          />
+          <Row className='mb-1 my-2 mx-1'>
+            {user ? 
+            <Form.Control
+              type="text"
+              placeholder="Search notes..."
+              value={searchTerm}
+              onChange={(e) => searchForNotes(e.target.value)}
+              className="border-5 border-primary"
+            />
           : null}
+          </Row>
           {user ? <List display={display}/> : <h2>Loading User Data...</h2>}
           <Status 
             message={alertMessage}

@@ -7,8 +7,8 @@ import Nav from './components/Nav';
 import Top from './components/Top';
  
 export const metadata: Metadata = {
-  title: 'Task App',
-  description: 'Task App WIP',
+  title: 'Supa-Notes',
+  description: 'An app for storing notes and tasks through supabase.',
 }
 
 export default function RootLayout({

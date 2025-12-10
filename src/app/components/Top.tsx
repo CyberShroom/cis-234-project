@@ -5,7 +5,7 @@ function Top()
 {
     return (
     <div id='top'>
-        <p id='top-text'>Task App</p>
+        <p id='top-text'>Supa-Notes</p>
     </div>
   );
 }
